@@ -15,7 +15,7 @@ import (
 	"github.com/quic-go/quic-go/qlogwriter"
 )
 
-const (
+var (
 	// Maximum reordering in time space before time based loss detection considers a packet lost.
 	// Specified as an RTT multiplier.
 	timeThreshold = 9.0 / 8
@@ -129,6 +129,7 @@ func NewSentPacketHandler(
 	qlogger qlogwriter.Recorder,
 	logger utils.Logger,
 ) SentPacketHandler {
+	initLossThresholdsFromEnv()
 	congestion := congestion.NewCubicSender(
 		congestion.DefaultClock{},
 		rttStats,
